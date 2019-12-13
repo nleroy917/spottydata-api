@@ -14,7 +14,7 @@ import json
 @app.route('/')
 def api_base():
 
-    return_string = '''\nWelcome to the Spotipyzer API. Please see <a href="https://github.com/NLeRoy917/playlist-api-api">the github repo <a> for details.\n'''
+    return_string = '''\nWelcome to the Spotipyzer API. Please see <a href="https://github.com/NLeRoy917/playlist-analyzer-api">the github repo <a> for details.\n'''
 
     return return_string
 
