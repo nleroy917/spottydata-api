@@ -5,6 +5,7 @@ from lib.track_analysis import *
 # import flask
 from flask import Flask
 from flask import request
+from flask import render_template
 app = Flask(__name__)
 
 #import other necessary modules
@@ -14,9 +15,9 @@ import json
 @app.route('/')
 def api_base():
 
-    return_string = '''\nWelcome to the spottydata API. Please see <a href="https://github.com/NLeRoy917/playlist-analyzer-api">the github repo <a> for details.\n'''
+    #return_string = '''\nWelcome to the spottydata API. Please see <a href="https://github.com/NLeRoy917/playlist-analyzer-api">the github repo <a> for details.\n'''
 
-    return return_string
+    return render_template("base.html")
 
 # Testing route/main route
 @app.route('/test')
