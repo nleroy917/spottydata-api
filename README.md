@@ -1,16 +1,16 @@
-# Spotify Playlist Analyzer Web API
+# SpottyData.com API
 ---
-This repo holds the code for running and testing the web API version of the spotify playlist analyzer code I originally wrote.
-
-The purpose is to create a front end that can handle authprization, and all that is required is for one to ping this API with the access_token and username, and the routes can then be used to do anaylsis of the data - prefereably in the browser as the data is returned in JSON format...
-
-... In Brief, this API is meant to act as a mediator between the front-end and the spotify API to properly format the data, and run any intermediate analysis required for the data.
+This is the back-end web API for the website www.SpottyData.com. Built with Flask, it acts as the interface between the site and Spotify's official API. Here you can find the code for the API, End-Point Documentation, or rasie any issues/comments! The base URL is: `https://api.spottydata.com/v1/`
 
 # Endpoints
 ---
-### api.domain/
-    Base URL - Returns HTML that points user to API documentation
-  
+## User Data
+| Method | Endpoint                              | Usage                              | Returns                                 | Resources   |
+|--------|---------------------------------------|------------------------------------|-----------------------------------------|-------------|
+| GET    | /v1/{user_id}                         | Get a user's profile information   | User Object                             | Spotify API |
+| GET    | /v1/{user_id}/playlists               | Get a users playlists              | List of minimal playlist objects        | Spotify API |
+| GET    | /v1/{user_id}/playlists/{playlist_id} | Get a specific playlist            | List of playlist objects                | Spotify API |
+| GET    | /v1/{user_id}/top/{type}              | Get a users top artists and tracks | List of artist objects or track objects | Spotify API |
 ### api.domain/test/
     Test URL - Returns string "Thor is the Strongest Avenger"
 
