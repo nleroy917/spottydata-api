@@ -11,11 +11,12 @@ This is the back-end web API for the website www.SpottyData.com. Built with Flas
 | GET    | /v1/{user_id}/playlists               | Get a users playlists              | List of minimal playlist objects        | Spotify API |
 | GET    | /v1/{user_id}/playlists/{playlist_id} | Get a specific playlist            | List of playlist objects                | Spotify API |
 | GET    | /v1/{user_id}/top/{type}              | Get a users top artists and tracks | List of artist objects or track objects | Spotify API |
-### api.domain/test/
-    Test URL - Returns string "Thor is the Strongest Avenger"
 
-### api.domain/user/playlists/
-    Returns list of a users playlists
-    #### Methods: GET
-    #### Header Fields: access_token - users access token which has been aquired with the appropriate scope (https://developer.spotify.com/documentation/general/guides/authorization-guide/#list-of-scopes)
+### Playlist Analysis
+| Method | Endpoint                     | Usage                                       | Returns                                        | Resources                |
+|--------|------------------------------|---------------------------------------------|------------------------------------------------|--------------------------|
+| POST   | /v1/analysis/lyrics          | Analyze song lyrics in playlist             | User Object                                    | Spotify API, Genius API, |
+|        |                              |                                             |                                                | Google Cloud             |
+| POST   | /v1/analysis/audio/{feature} | Analyze playlist for certain audio feature  | List of raw data for the audio feature to plot | Spotify API              |
+
    
