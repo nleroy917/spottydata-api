@@ -13,10 +13,9 @@ This is the back-end web API for the website www.SpottyData.com. Built with Flas
 | GET    | /v1/{user_id}/top/{type}              | Get a users top artists and tracks | List of artist objects or track objects | Spotify API |
 
 ### Playlist Analysis
-| Method | Endpoint                     | Usage                                       | Returns                                        | Resources                |
-|--------|------------------------------|---------------------------------------------|------------------------------------------------|--------------------------|
-| POST   | /v1/analysis/lyrics          | Analyze song lyrics in playlist             | User Object                                    | Spotify API, Genius API, |
-|        |                              |                                             |                                                | Google Cloud             |
-| POST   | /v1/analysis/audio/{feature} | Analyze playlist for certain audio feature  | List of raw data for the audio feature to plot | Spotify API              |
+| Method | Endpoint                     | Usage                                       | Returns                                        | Resources                             |
+|--------|------------------------------|---------------------------------------------|------------------------------------------------|---------------------------------------|
+| POST   | /v1/analysis/lyrics          | Analyze song lyrics in playlist             | User Object                                    | Spotify API, Genius API, Google Cloud |
+| POST   | /v1/analysis/audio/{feature} | Analyze playlist for certain audio feature  | List of raw data for the audio feature to plot | Spotify API                           |
 
    
