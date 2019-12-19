@@ -4,7 +4,7 @@ This is the back-end web API for the website www.SpottyData.com. Built with Flas
 
 # Endpoints
 
-## User Data
+**User Data**
 
 | Method | Endpoint                              | Usage                              | Returns                                 | Resources   |
 |--------|---------------------------------------|------------------------------------|-----------------------------------------|-------------|
