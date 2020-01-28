@@ -1,21 +1,21 @@
-# Spotify Playlist Analyzer Web API
----
-This repo holds the code for running and testing the web API version of the spotify playlist analyzer code I originally wrote.
+# SpottyData.com API
 
-The purpose is to create a front end that can handle authprization, and all that is required is for one to ping this API with the access_token and username, and the routes can then be used to do anaylsis of the data - prefereably in the browser as the data is returned in JSON format...
-
-... In Brief, this API is meant to act as a mediator between the front-end and the spotify API to properly format the data, and run any intermediate analysis required for the data.
+This is the back-end web API for the website www.SpottyData.com. Built with Flask, it acts as the interface between the site and Spotify's official API. Here you can find the code for the API, End-Point Documentation, or rasie any issues/comments! The base URL is: `https://api.spottydata.com/v1/`
 
 # Endpoints
----
-### api.domain/
-    Base URL - Returns HTML that points user to API documentation
-  
-### api.domain/test/
-    Test URL - Returns string "Thor is the Strongest Avenger"
+### User Data
 
-### api.domain/user/playlists/
-    Returns list of a users playlists
-    #### Methods: GET
-    #### Header Fields: access_token - users access token which has been aquired with the appropriate scope (https://developer.spotify.com/documentation/general/guides/authorization-guide/#list-of-scopes)
+| Method | Endpoint                              | Usage                              | Returns                                 | Resources   |
+|--------|---------------------------------------|------------------------------------|-----------------------------------------|-------------|
+| GET    | /v1/{user_id}                         | Get a user's profile information   | User Object                             | Spotify API |
+| GET    | /v1/{user_id}/playlists               | Get a users playlists              | List of minimal playlist objects        | Spotify API |
+| GET    | /v1/{user_id}/playlists/{playlist_id} | Get a specific playlist            | List of playlist objects                | Spotify API |
+| GET    | /v1/{user_id}/top/{type}              | Get a users top artists and tracks | List of artist objects or track objects | Spotify API |
+
+### Playlist Analysis
+| Method | Endpoint                     | Usage                                       | Returns                                        | Resources                             |
+|--------|------------------------------|---------------------------------------------|------------------------------------------------|---------------------------------------|
+| POST   | /v1/analysis/lyrics          | Analyze song lyrics in playlist             | User Object                                    | Spotify API, Genius API, Google Cloud |
+| POST   | /v1/analysis/audio/{feature} | Analyze playlist for certain audio feature  | List of raw data for the audio feature to plot | Spotify API                           |
+
    
