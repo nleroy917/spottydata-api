@@ -27,6 +27,13 @@ def api_base_test():
 
     return return_string
 
+ @app.route('/callback')
+ def api_call_back():
+
+ 	auth_code = request.args.get('code')
+
+ 	return auth_code
+
 # Get playlists for a specific use
 @app.route('/<username>/playlists', methods=['GET'])
 def playlists_get(username):
