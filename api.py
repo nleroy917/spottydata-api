@@ -15,24 +15,24 @@ import json
 @app.route('/')
 def api_base():
 
-    #return_string = '''\nWelcome to the spottydata API. Please see <a href="https://github.com/NLeRoy917/playlist-analyzer-api">the github repo <a> for details.\n'''
+	#return_string = '''\nWelcome to the spottydata API. Please see <a href="https://github.com/NLeRoy917/playlist-analyzer-api">the github repo <a> for details.\n'''
 
-    return render_template("base.html")
+	return render_template("base.html")
 
 # Testing route/main route
 @app.route('/test')
 def api_base_test():
 
-    return_string = '''\nBARNABAS A BUM FR\n'''
+	return_string = '''\nBARNABAS A BUM FR\n'''
 
-    return return_string
+	return return_string
 
- @app.route('/callback')
- def api_call_back():
+@app.route('/callback')
+def api_call_back():
 
- 	auth_code = request.args.get('code')
+	auth_code = request.args.get('code')
 
- 	return auth_code
+	return auth_code
 
 # Get playlists for a specific use
 @app.route('/<username>/playlists', methods=['GET'])
