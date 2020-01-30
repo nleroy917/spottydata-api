@@ -15,7 +15,7 @@ This is the back-end web API for the website www.SpottyData.com. Built with Flas
 ### Playlist Analysis
 | Method | Endpoint                     | Usage                                       | Returns                                        | Resources                             |
 |--------|------------------------------|---------------------------------------------|------------------------------------------------|---------------------------------------|
-| POST   | /analysis/lyrics          | Analyze song lyrics in playlist             | User Object                                    | Spotify API, Genius API, Google Cloud |
+| POST   | /analysis/lyrics          | Analyze song lyrics in playlist             | List of lyrics objects                                | Spotify API, Genius API, Google Cloud |
 | POST   | /analysis/audio/{feature} | Analyze playlist for certain audio feature  | List of raw data for the audio feature to plot | Spotify API                           |
 
    
