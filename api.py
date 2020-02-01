@@ -47,7 +47,7 @@ def playlists_get(username):
 
 
 
-@app.route('/<username>/<playlist_id>/analysis', methods=['GET'])
+@app.route('/<playlist_id>/analysis', methods=['GET'])
 def analyze_playlist(username,playlist_id):
 
 	access_token = request.headers['access_token']
@@ -70,7 +70,7 @@ def analyze_playlist(username,playlist_id):
 
 
 
-@app.route('/<username>/<playlist_id>/features', methods=['GET'])
+@app.route('/<playlist_id>/features', methods=['GET'])
 def feature_playlist(username,playlist_id):
 
 	access_token = request.headers['access_token']
