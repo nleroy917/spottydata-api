@@ -4,6 +4,7 @@ from lib.track_analysis import *
 
 # import flask
 from flask import Flask
+from flask import jsonify
 from flask import request
 from flask import render_template
 from flask_cors import CORS
@@ -128,7 +129,7 @@ def feature_playlist(playlist_id):
 		playlist_analysis['type'].append(analysis['type'])
 
 	# Pack into JSON format
-	playlist_analysis_json = json.dumps(playlist_analysis)
+	playlist_analysis_json = jsonfy(playlist_analysis)
 
 	return playlist_analysis_json
 
