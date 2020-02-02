@@ -73,7 +73,7 @@ def analyze_playlist(username,playlist_id):
 
 
 @app.route('/<playlist_id>/features', methods=['GET'])
-def feature_playlist(username,playlist_id):
+def feature_playlist(playlist_id):
 
 	access_token = request.headers['access_token']
 	spotify_header = {'Authorization': 'Bearer ' + access_token}
