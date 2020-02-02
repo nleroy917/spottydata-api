@@ -129,7 +129,7 @@ def feature_playlist(playlist_id):
 		playlist_analysis['type'].append(analysis['type'])
 
 	# Pack into JSON format
-	playlist_analysis_json = jsonfy(playlist_analysis)
+	playlist_analysis_json = jsonify(playlist_analysis)
 
 	return playlist_analysis_json
 
