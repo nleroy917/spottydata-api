@@ -83,7 +83,7 @@ def feature_playlist(playlist_id):
 
 	playlist_analysis = {"names":[],
 						"ids":[],
-						"duration_ms" : [],
+						#"duration_ms" : [],
   						"key" : [],
   						"mode" : [],
   						"time_signature" : [],
@@ -110,7 +110,7 @@ def feature_playlist(playlist_id):
 		# Organize data into raw data that can be visualized client-side
 		playlist_analysis['names'].append(track['name'])
 		playlist_analysis['ids'].append(track['id'])
-		playlist_analysis['duration_ms'].append(analysis['duration_ms'])
+		#playlist_analysis['duration_ms'].append(analysis['duration_ms'])
 		playlist_analysis['key'].append(int_to_key(analysis['key']))
 		playlist_analysis['mode'].append(int_to_mode(analysis['mode']))
 		playlist_analysis['time_signature'].append(analysis['time_signature'])
