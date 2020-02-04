@@ -107,26 +107,32 @@ def feature_playlist(playlist_id):
 		# Analyze the track with Spotify
 		analysis = get_track_data(track['id'],spotify_header)
 
-		# Organize data into raw data that can be visualized client-side
-		playlist_analysis['names'].append(track['name'])
-		playlist_analysis['ids'].append(track['id'])
-		#playlist_analysis['duration_ms'].append(analysis['duration_ms'])
-		playlist_analysis['key'].append(int_to_key(analysis['key']))
-		playlist_analysis['mode'].append(int_to_mode(analysis['mode']))
-		playlist_analysis['time_signature'].append(analysis['time_signature'])
-		playlist_analysis['acousticness'].append(analysis['acousticness'])
-		playlist_analysis['danceability'].append(analysis['danceability'])
-		playlist_analysis['energy'].append(analysis['energy'])
-		playlist_analysis['instrumentalness'].append(analysis['instrumentalness'])
-		playlist_analysis['liveness'].append(analysis['liveness'])
-		playlist_analysis['loudness'].append(analysis['loudness'])
-		playlist_analysis['speechiness'].append(analysis['speechiness'])
-		playlist_analysis['valence'].append(analysis['valence'])
-		playlist_analysis['tempo'].append(analysis['tempo'])
-		playlist_analysis['uri'].append(analysis['uri'])
-		playlist_analysis['track_href'].append(analysis['track_href'])
-		playlist_analysis['analysis_url'].append(analysis['analysis_url'])
-		playlist_analysis['type'].append(analysis['type'])
+		# initialize keys to check for
+		analysis_keys = ['name','id','duration_ms','key','mode','time_signature','acousticness','danceability','energy','instrumentalness','liveness','loudness','speechiness','valence','tempo','uri','track_href','analysis_url','type']
+
+		# Check that all data is there before appending to playlist_analysis
+		if all(key in track for key in analysis_keys):
+			# Organize data into raw data that can be visualized client-side
+			playlist_analysis['names'].append(track['name'])
+			playlist_analysis['ids'].append(track['id'])
+			playlist_analysis['duration_ms'].append(analysis['duration_ms'])
+			playlist_analysis['key'].append(int_to_key(analysis['key']))
+			playlist_analysis['mode'].append(int_to_mode(analysis['mode']))
+			playlist_analysis['time_signature'].append(analysis['time_signature'])
+			playlist_analysis['acousticness'].append(analysis['acousticness'])
+			playlist_analysis['danceability'].append(analysis['danceability'])
+			playlist_analysis['energy'].append(analysis['energy'])
+			playlist_analysis['instrumentalness'].append(analysis['instrumentalness'])
+			playlist_analysis['liveness'].append(analysis['liveness'])
+			playlist_analysis['loudness'].append(analysis['loudness'])
+			playlist_analysis['speechiness'].append(analysis['speechiness'])
+			playlist_analysis['valence'].append(analysis['valence'])
+			playlist_analysis['tempo'].append(analysis['tempo'])
+			playlist_analysis['uri'].append(analysis['uri'])
+			playlist_analysis['track_href'].append(analysis['track_href'])
+			playlist_analysis['analysis_url'].append(analysis['analysis_url'])
+			playlist_analysis['type'].append(analysis['type'])
+
 
 	# Pack into JSON format
 	playlist_analysis_json = jsonify(playlist_analysis)
