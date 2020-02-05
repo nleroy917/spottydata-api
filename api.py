@@ -83,7 +83,7 @@ def feature_playlist(playlist_id):
 
 	playlist_analysis = {"names":[],
 						"ids":[],
-						#"duration_ms" : [],
+						"duration_ms" : [],
   						"key" : [],
   						"mode" : [],
   						"time_signature" : [],
@@ -114,25 +114,101 @@ def feature_playlist(playlist_id):
 		# Check that all data is there before appending to playlist_analysis
 		#if all(key in track for key in analysis_keys):
 			# Organize data into raw data that can be visualized client-side
-		playlist_analysis['names'].append(track['name'])
-		playlist_analysis['ids'].append(track['id'])
-		#playlist_analysis['duration_ms'].append(analysis['duration_ms'])
-		playlist_analysis['key'].append(int_to_key(analysis['key']))
-		playlist_analysis['mode'].append(int_to_mode(analysis['mode']))
-		playlist_analysis['time_signature'].append(analysis['time_signature'])
-		playlist_analysis['acousticness'].append(analysis['acousticness'])
-		playlist_analysis['danceability'].append(analysis['danceability'])
-		playlist_analysis['energy'].append(analysis['energy'])
-		playlist_analysis['instrumentalness'].append(analysis['instrumentalness'])
-		playlist_analysis['liveness'].append(analysis['liveness'])
-		playlist_analysis['loudness'].append(analysis['loudness'])
-		playlist_analysis['speechiness'].append(analysis['speechiness'])
-		playlist_analysis['valence'].append(analysis['valence'])
-		playlist_analysis['tempo'].append(analysis['tempo'])
-		playlist_analysis['uri'].append(analysis['uri'])
-		playlist_analysis['track_href'].append(analysis['track_href'])
-		playlist_analysis['analysis_url'].append(analysis['analysis_url'])
-		playlist_analysis['type'].append(analysis['type'])
+		try:
+			playlist_analysis['names'].append(track['name'])
+		except:
+			pass
+
+		try:
+			playlist_analysis['ids'].append(track['id'])
+		except:
+			pass
+
+		try:
+			playlist_analysis['duration_ms'].append(analysis['duration_ms'])
+		except:
+			pass
+
+		try:
+			playlist_analysis['key'].append(int_to_key(analysis['key']))
+		except:
+			pass
+
+		try:
+			playlist_analysis['mode'].append(int_to_mode(analysis['mode']))
+		except:
+			pass
+
+		try:
+			playlist_analysis['time_signature'].append(analysis['time_signature'])
+		except:
+			pass
+
+		try:
+			playlist_analysis['acousticness'].append(analysis['acousticness'])
+		except:
+			pass
+
+		try:
+			playlist_analysis['danceability'].append(analysis['danceability'])
+		except:
+			pass
+
+		try:
+			playlist_analysis['energy'].append(analysis['energy'])
+		except:
+			pass
+
+		try:
+			playlist_analysis['instrumentalness'].append(analysis['instrumentalness'])
+		except:
+			pass
+
+		try:
+			playlist_analysis['liveness'].append(analysis['liveness'])
+		except:
+			pass
+
+		try:
+			playlist_analysis['loudness'].append(analysis['loudness'])
+		except:
+			pass
+
+		try:
+			playlist_analysis['speechiness'].append(analysis['speechiness'])
+		except:
+			pass
+
+		try:
+			playlist_analysis['valence'].append(analysis['valence'])
+		except:
+			pass
+
+		try:
+			playlist_analysis['tempo'].append(analysis['tempo'])
+		except:
+			pass
+
+		try:
+			playlist_analysis['uri'].append(analysis['uri'])
+		except:
+			pass
+
+		try:
+			playlist_analysis['track_href'].append(analysis['track_href'])
+		except:
+			pass
+
+		try:
+			playlist_analysis['analysis_url'].append(analysis['analysis_url'])
+		except:
+			pass
+
+		try:
+			playlist_analysis['type'].append(analysis['type'])
+		except:
+			pass
+
 
 
 	# Pack into JSON format
