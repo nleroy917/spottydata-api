@@ -1,10 +1,9 @@
 import requests
 import json
 
-def test(access_token,playlist_id):
+def test(BASE_URL,access_token,playlist_id):
 
 	headers = {'access_token': access_token}
-	BASE_URL = 'http://127.0.0.1:5000/'
 
 	r = requests.get(BASE_URL + playlist_id + '/analysis/keys',headers=headers)
 
@@ -13,7 +12,8 @@ def test(access_token,playlist_id):
 		#print(r.json)
 		return True
 	else:
-		print('\tFAIL')
+		print('\tFAIL',end='')
+		print(' | error: {}, {}'.format(r.status_code,r.text))
 		return False
 
 

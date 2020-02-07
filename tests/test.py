@@ -7,6 +7,8 @@ from routes import playlist_analysis_keys
 from lib.authorize import *
 from lib.playlists import *
 
+BASE_URL = 'https://spottydata-api.herokuapp.com/'
+
 def get_access_token():
 
 	spotify_authenticator = Authenticator('config.ini')
@@ -38,11 +40,11 @@ if __name__ == '__main__':
 
 	# Test main route
 	print('Test (1/{}) | /'.format(num_tests),end='')
-	base.test()
+	base.test(BASE_URL)
 	cnt += 1
 
 	# Test key data generation
 	print('Test (2/{}) | <playlist_id>/analysis/keys'.format(num_tests),end='')
-	playlist_analysis_keys.test(ACCESS_TOKEN,PLAYLIST_ID)
+	playlist_analysis_keys.test(BASE_URL,ACCESS_TOKEN,PLAYLIST_ID)
 	cnt += 1
 
