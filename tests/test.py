@@ -40,11 +40,14 @@ if __name__ == '__main__':
 
 	# Test main route
 	print('Test (1/{}) | /'.format(num_tests),end='')
-	base.test(BASE_URL)
+	data = base.test(BASE_URL)
 	cnt += 1
 
 	# Test key data generation
 	print('Test (2/{}) | <playlist_id>/analysis/keys'.format(num_tests),end='')
-	playlist_analysis_keys.test(BASE_URL,ACCESS_TOKEN,PLAYLIST_ID)
+	data = playlist_analysis_keys.test(BASE_URL,ACCESS_TOKEN,PLAYLIST_ID)
+	#print(data)
 	cnt += 1
+
+	
 

@@ -10,7 +10,7 @@ def test(BASE_URL,access_token,playlist_id):
 	if r.status_code == 200:
 		print('\tPASS')
 		#print(r.json)
-		return True
+		return json.loads(r.text)
 	else:
 		print('\tFAIL',end='')
 		print(' | error: {}, {}'.format(r.status_code,r.text))
