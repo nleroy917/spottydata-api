@@ -51,7 +51,7 @@ def playlists_get(username):
 
 
 @app.route('/<playlist_id>/analysis', methods=['GET'])
-def analyze_playlist(username,playlist_id):
+def analyze_playlist(playlist_id):
 
 	access_token = request.headers['access_token']
 	spotify_header = {'Authorization': 'Bearer ' + access_token}
@@ -71,6 +71,53 @@ def analyze_playlist(username,playlist_id):
 
 	return "Under Construction" #playlist_analysis_json
 
+@app.route('/<playlist_id>/analysis/keys', methods=['GET'])
+def get_key_data(playlist_id):
+
+
+	access_token = request.headers['access_token']
+	spotify_header = {'Authorization': 'Bearer ' + access_token}
+
+	tracks = get_tracks(playlist_id,spotify_header)
+
+	key_data = {'minor': {'A':0,
+						'A#':0,
+						'B':0,
+						'C':0,
+						'C#':0,
+						'D':0,
+						'D#':0,
+						'E':0,
+						'F':0,
+						'F#':0,
+						'G':0,
+						'G#':0},
+
+				'major': {'A':0,
+						'A#':0,
+						'B':0,
+						'C':0,
+						'C#':0,
+						'D':0,
+						'D#':0,
+						'E':0,
+						'F':0,
+						'F#':0,
+						'G':0,
+						'G#':0}
+				}
+
+	for track in tracks:
+		analysis = get_track_data(track['id'],spotify_header)
+		if analysis['mode'] == 0:
+			key_data['minor'][int_to_key(analysis['key'])] += 1
+		elif analysis['mode'] == 1:
+			key_data['major'][int_to_key(analysis['key'])] += 1
+		else:
+			continue
+
+
+	return jsonify(key_data)
 
 
 @app.route('/<playlist_id>/features', methods=['GET'])
