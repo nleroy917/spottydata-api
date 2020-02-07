@@ -74,12 +74,14 @@ def analyze_playlist(playlist_id):
 @app.route('/<playlist_id>/analysis/keys', methods=['GET'])
 def get_key_data(playlist_id):
 
-
+	# Get access token from the headers and generate spotify's required header
 	access_token = request.headers['access_token']
 	spotify_header = {'Authorization': 'Bearer ' + access_token}
 
+	# Extract the tracks from the playlist
 	tracks = get_tracks(playlist_id,spotify_header)
 
+	# Init key object
 	key_data = {'minor': {'A':0,
 						'A#':0,
 						'B':0,
@@ -107,16 +109,25 @@ def get_key_data(playlist_id):
 						'G#':0}
 				}
 
+				
+	# Iterate and parse data
 	for track in tracks:
 		analysis = get_track_data(track['id'],spotify_header)
+
+	# Some songs may not have a ket or mode, so catch key_not_exist error and pass 
+	# (this would occur for a track that is a podcast or local file)
+	try:
 		if analysis['mode'] == 0:
 			key_data['minor'][int_to_key(analysis['key'])] += 1
 		elif analysis['mode'] == 1:
 			key_data['major'][int_to_key(analysis['key'])] += 1
 		else:
 			continue
+	except:
+		pass
 
 
+	# Return JSON Package
 	return jsonify(key_data)
 
 
