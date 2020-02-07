@@ -114,17 +114,17 @@ def get_key_data(playlist_id):
 	for track in tracks:
 		analysis = get_track_data(track['id'],spotify_header)
 
-	# Some songs may not have a ket or mode, so catch key_not_exist error and pass 
-	# (this would occur for a track that is a podcast or local file)
-	try:
-		if analysis['mode'] == 0:
-			key_data['minor'][int_to_key(analysis['key'])] += 1
-		elif analysis['mode'] == 1:
-			key_data['major'][int_to_key(analysis['key'])] += 1
-		else:
-			continue
-	except:
-		pass
+		# Some songs may not have a ket or mode, so catch key_not_exist error and pass 
+		# (this would occur for a track that is a podcast or local file)
+		try:
+			if analysis['mode'] == 0:
+				key_data['minor'][int_to_key(analysis['key'])] += 1
+			elif analysis['mode'] == 1:
+				key_data['major'][int_to_key(analysis['key'])] += 1
+			else:
+				continue
+		except:
+			pass
 
 
 	# Return JSON Package
