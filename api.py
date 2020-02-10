@@ -30,14 +30,7 @@ def api_base_test():
 
 	return return_string
 
-@app.route('/callback')
-def api_call_back():
-
-	auth_code = request.args.get('code')
-
-	return auth_code
-
-# Get playlists for a specific use
+# Get playlists for a specific user
 @app.route('/<username>/playlists', methods=['GET'])
 def playlists_get(username):
 	
@@ -48,28 +41,6 @@ def playlists_get(username):
 
 	return playlist_json
 
-
-
-@app.route('/<playlist_id>/analysis', methods=['GET'])
-def analyze_playlist(playlist_id):
-
-	access_token = request.headers['access_token']
-	spotify_header = {'Authorization': 'Bearer ' + access_token}
-
-	tracks = get_tracks(playlist_id,spotify_header)
-
-	playlist_analysis = []
-
-	# converrt data to raw data so that the list can be used for visualization
-	for track in tracks:
-		continue
-		# Get analysis data from Spotify
-		analysis = get_track_data(track['id'],spotify_header)
-
-
-	playlist_analysis_json = json.dumps(playlist_analysis)
-
-	return "Under Construction" #playlist_analysis_json
 
 @app.route('/<playlist_id>/analysis/keys', methods=['GET'])
 def get_key_data(playlist_id):
@@ -129,6 +100,54 @@ def get_key_data(playlist_id):
 
 	# Return JSON Package
 	return jsonify(key_data)
+
+@app.route('/<playlist_id>/analysis/feel', methods=['GET'])
+def get_feel_data(playlist_id):
+
+	# Get access token from the headers and generate spotify's required header
+	access_token = request.headers['access_token']
+	spotify_header = {'Authorization': 'Bearer ' + access_token}
+
+	# Extract the tracks from the playlist
+	tracks = get_tracks(playlist_id,spotify_header)
+
+	feel_data = {
+				  "acousticness" : 0,
+				  "danceability" : 0,
+				  "energy" : 0,
+				  "instrumentalness" : 0,
+				  "liveness" : 0,
+				  "loudness" : 0,
+				  "speechiness" : 0
+				}
+
+	cnt = 0
+
+	for track in tracks:
+
+		# Analyze the track with Spotify
+		analysis = get_track_data(track['id'],spotify_header)
+
+		try:
+			feel_data['acousticness'] += analysis['acousticness']
+			feel_data["danceability"] += analysis['acoustic']
+			feel_data["energy"] += analysis['energy']
+			feel_data["instrumentalness"] += analysis['instrumentalness']
+			feel_data["liveness"] += analysis['liveness']
+			feel_data["loudness"] += analysis['loudness']
+			feel_data["speechiness"] += analysis['speechiness']
+		except:
+			pass
+
+		cnt += 1
+
+		# Divide the sum by the number of tracks
+		for key in feel_data:
+			feel_data[key] /= cnt
+
+
+
+	return 
 
 
 @app.route('/<playlist_id>/features', methods=['GET'])

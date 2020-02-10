@@ -4,6 +4,7 @@ sys.path.append("..")
 
 from routes import base
 from routes import playlist_analysis_keys
+from routes import playlist_analysis_feel
 from lib.authorize import *
 from lib.playlists import *
 
@@ -39,13 +40,19 @@ if __name__ == '__main__':
 	cnt = 1
 
 	# Test main route
-	print('Test (1/{}) | /'.format(num_tests),end='')
+	print('Test ({}/{}) | /'.format(cnt,num_tests),end='')
 	data = base.test(BASE_URL)
 	cnt += 1
 
 	# Test key data generation
-	print('Test (2/{}) | <playlist_id>/analysis/keys'.format(num_tests),end='')
+	print('Test ({}/{}) | <playlist_id>/analysis/keys'.format(cnt,num_tests),end='')
 	data = playlist_analysis_keys.test(BASE_URL,ACCESS_TOKEN,PLAYLIST_ID)
+	#print(data)
+	cnt += 1
+
+	# Test feel data generation
+	print('Test ({}/{}) | <playlist_id>/analysis/feel'.format(cnt,num_tests),end='')
+	data = playlist_analysis_feel.test(BASE_URL,ACCESS_TOKEN,PLAYLIST_ID)
 	#print(data)
 	cnt += 1
 
