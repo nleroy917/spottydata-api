@@ -5,11 +5,12 @@ sys.path.append("..")
 from routes import base
 from routes import playlist_analysis_keys
 from routes import playlist_analysis_feel
+from routes import playlist_analysis_genre
 from lib.authorize import *
 from lib.playlists import *
 
-# BASE_URL = 'https://spottydata-api.herokuapp.com/'
-BASE_URL = 'http://127.0.0.1:5000/'
+BASE_URL = 'https://spottydata-api.herokuapp.com/'
+# BASE_URL = 'http://127.0.0.1:5000/'
 
 def get_access_token():
 
@@ -25,16 +26,17 @@ def get_playlist():
 	auth_header = spotify_authenticator.generate_header()
 
 	playlists = get_playlists(spotify_authenticator.username,auth_header)
+	playlist = np.random.choice(playlists)
 
-	return np.random.choice(playlists)['id']
+	return playlist['id'],playlist['name']
 
 
 if __name__ == '__main__':
 
 	ACCESS_TOKEN = get_access_token()
-	PLAYLIST_ID = get_playlist()
+	PLAYLIST_ID, PLAYLIST_NAME = get_playlist()
 
-	print('Running Tests:')
+	print('Running Tests on {}:'.format(PLAYLIST_NAME))
 	print('-='*40)
 
 	num_tests = 9
@@ -53,6 +55,12 @@ if __name__ == '__main__':
 
 	# Test feel data generation
 	print('Test ({}/{}) | <playlist_id>/analysis/feel'.format(cnt,num_tests),end='')
+	data = playlist_analysis_feel.test(BASE_URL,ACCESS_TOKEN,PLAYLIST_ID)
+	# print(data)
+	cnt += 1
+
+	# Test feel data generation
+	print('Test ({}/{}) | <playlist_id>/analysis/genre'.format(cnt,num_tests),end='')
 	data = playlist_analysis_feel.test(BASE_URL,ACCESS_TOKEN,PLAYLIST_ID)
 	# print(data)
 	cnt += 1

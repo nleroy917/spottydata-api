@@ -151,6 +151,44 @@ def get_feel_data(playlist_id):
 
 	return jsonify(feel_data)
 
+@app.route('/<playlist_id>/analysis/genre', methods=['GET'])
+def get_genre_data(playlist_id):
+
+	# Get access token from the headers and generate spotify's required header
+	access_token = request.headers['access_token']
+	spotify_header = {'Authorization': 'Bearer ' + access_token}
+
+	# Extract the tracks from the playlist
+	tracks = get_tracks(playlist_id,spotify_header)
+
+	genre_data = {}
+
+	for track in tracks:
+
+		try:
+			# Get track artist
+			artist_id = track['artists'][0]['id']
+
+			# Get Artist data + genres
+			artist = get_artist(artist_id,spotify_header)
+
+			genres = artist['genres']
+
+			# Append artist genres to the genre dictionary
+			for genre in genres:
+
+				# check that the genre exists in the dictionary
+				if genre not in genre_data:
+					genre_data[genre] = 1
+				else:
+					genre_data[genre] += 1
+		except:
+			continue
+
+	#print(genre_data)
+
+	return jsonify(genre_data)
+
 
 @app.route('/<playlist_id>/features', methods=['GET'])
 def feature_playlist(playlist_id):

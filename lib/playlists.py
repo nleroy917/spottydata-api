@@ -47,6 +47,15 @@ def get_tracks(playlist_id,auth_header):
 
     return parsed_playlist
 
+def get_artist(artist_id,auth_header):
+
+    response = requests.get('https://api.spotify.com/v1/artists/{}'.format(artist_id),
+                            headers=auth_header)
+
+    artist = json.loads(response.text)
+
+    return artist
+
 if __name__ == '__main__':
 
         playlist_URI = 'spotify:playlist:7iGY7WPiTvvSTr6ZgO3rR2'
