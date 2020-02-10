@@ -130,24 +130,26 @@ def get_feel_data(playlist_id):
 
 		try:
 			feel_data['acousticness'] += analysis['acousticness']
-			feel_data["danceability"] += analysis['acoustic']
-			feel_data["energy"] += analysis['energy']
-			feel_data["instrumentalness"] += analysis['instrumentalness']
-			feel_data["liveness"] += analysis['liveness']
-			feel_data["loudness"] += analysis['loudness']
-			feel_data["speechiness"] += analysis['speechiness']
+			feel_data['danceability'] += analysis['danceability']
+			feel_data['energy'] += analysis['energy']
+			feel_data['instrumentalness'] += analysis['instrumentalness']
+			feel_data['liveness'] += analysis['liveness']
+			feel_data['loudness'] += analysis['loudness']
+			feel_data['speechiness'] += analysis['speechiness']
+
 		except:
 			pass
 
 		cnt += 1
 
-		# Divide the sum by the number of tracks
-		for key in feel_data:
-			feel_data[key] /= cnt
+
+	# Divide the sum by the number of tracks
+	for key in feel_data:
+		feel_data[key] /= cnt
 
 
 
-	return 
+	return jsonify(feel_data)
 
 
 @app.route('/<playlist_id>/features', methods=['GET'])

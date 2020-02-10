@@ -8,7 +8,8 @@ from routes import playlist_analysis_feel
 from lib.authorize import *
 from lib.playlists import *
 
-BASE_URL = 'https://spottydata-api.herokuapp.com/'
+# BASE_URL = 'https://spottydata-api.herokuapp.com/'
+BASE_URL = 'http://127.0.0.1:5000/'
 
 def get_access_token():
 
@@ -53,7 +54,7 @@ if __name__ == '__main__':
 	# Test feel data generation
 	print('Test ({}/{}) | <playlist_id>/analysis/feel'.format(cnt,num_tests),end='')
 	data = playlist_analysis_feel.test(BASE_URL,ACCESS_TOKEN,PLAYLIST_ID)
-	#print(data)
+	# print(data)
 	cnt += 1
 
 	
