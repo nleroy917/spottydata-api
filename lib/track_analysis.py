@@ -10,6 +10,26 @@ import numpy as np
 sns.set(color_codes=True)
 sns.set_palette("dark")
 
+def generate_hist(array):
+
+	class Hist:
+
+		def __init__(self):
+		    self.counts = []
+		    self.bins = []
+
+		def create(self,array):
+
+			# generate the counts and bins
+			# note that length(self.bins) = length(self.counts) + 1
+			self.counts, self.bins = np.histogram(array)
+
+	# create histogram object and generate the bins with the data
+	hist = Hist()
+	hist.create(array)
+
+	return hist
+
 def get_track_data(track_id,auth_header):
 
 	response = requests.get('https://api.spotify.com/v1/audio-features/{}'.format(track_id),

@@ -189,6 +189,38 @@ def get_genre_data(playlist_id):
 
 	return jsonify(genre_data)
 
+@app.route('/<playlist_id>/analysis/tempo', methods=['GET'])
+def get_tempo_data(playlist_id):
+
+	# Get access token from the headers and generate spotify's required header
+	access_token = request.headers['access_token']
+	spotify_header = {'Authorization': 'Bearer ' + access_token}
+
+	# Extract the tracks from the playlist
+	tracks = get_tracks(playlist_id,spotify_header)
+
+	tempo_store = []
+	tempo_data = {}
+
+	for track in tracks:
+
+		try:
+			#analyze track and store tempo
+			analysis = get_track_data(track['id'],spotify_header)
+			tempo_store.append(analysis['tempo'])
+		except:
+			continue
+
+
+	# create hist object from array of data
+	hist = generate_hist(tempo_store)
+	
+	# populate payload | dont forget to convert numpy arrays to lists
+	tempo_data={'bins': hist.bins.tolist(),
+				'counts': hist.counts.tolist()}
+
+	return jsonify(tempo_data)
+
 
 if __name__ == '__main__':
-    app.run()
+	app.run()

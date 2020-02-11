@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
 	# Test feel data generation
 	print('Test ({}/{}) | <playlist_id>/analysis/genre'.format(cnt,num_tests),end='')
-	data = playlist_analysis_feel.test(BASE_URL,ACCESS_TOKEN,PLAYLIST_ID)
+	data = playlist_analysis_genre.test(BASE_URL,ACCESS_TOKEN,PLAYLIST_ID)
 	# print(data)
 	cnt += 1
 
