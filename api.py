@@ -1,4 +1,4 @@
-# Import costume libraries
+# Import custom libraries
 from lib.playlists import *
 from lib.track_analysis import *
 
