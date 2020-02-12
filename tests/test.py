@@ -6,11 +6,12 @@ from routes import base
 from routes import playlist_analysis_keys
 from routes import playlist_analysis_feel
 from routes import playlist_analysis_genre
+from routes import playlist_analysis_tempo
 from lib.authorize import *
 from lib.playlists import *
 
-BASE_URL = 'https://spottydata-api.herokuapp.com/'
-# BASE_URL = 'http://127.0.0.1:5000/'
+# BASE_URL = 'https://spottydata-api.herokuapp.com/'
+BASE_URL = 'http://127.0.0.1:5000/'
 
 def get_access_token():
 
@@ -59,10 +60,16 @@ if __name__ == '__main__':
 	# print(data)
 	cnt += 1
 
-	# Test feel data generation
+	# Test genre data generation
 	print('Test ({}/{}) | <playlist_id>/analysis/genre'.format(cnt,num_tests),end='')
 	data = playlist_analysis_genre.test(BASE_URL,ACCESS_TOKEN,PLAYLIST_ID)
 	# print(data)
+	cnt += 1
+
+	# Test tempo data generation
+	print('Test ({}/{}) | <playlist_id>/analysis/tempo'.format(cnt,num_tests),end='')
+	data = playlist_analysis_tempo.test(BASE_URL,ACCESS_TOKEN,PLAYLIST_ID)
+	print(data)
 	cnt += 1
 
 	

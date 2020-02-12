@@ -5,6 +5,8 @@ sys.path.append("..")
 
 from utils.authentication import *
 
+import termplotlib as tpl
+
 def test(BASE_URL,access_token,playlist_id):
 
 	headers = {'access_token': access_token}
@@ -31,4 +33,10 @@ if __name__ == '__main__':
 
 	print('Testing {}'.format(playlist_name))
 
-	print(test(BASE_URL,access_token,playlist_id))
+	data = test(BASE_URL,access_token,playlist_id)
+	print(data)
+
+	fig = tpl.figure()
+	fig.plot(data['x'], data['y'], width=60, height=20)
+	fig.show()
+

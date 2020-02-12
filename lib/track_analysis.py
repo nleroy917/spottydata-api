@@ -10,7 +10,7 @@ import numpy as np
 sns.set(color_codes=True)
 sns.set_palette("dark")
 
-def generate_hist(array):
+def generate_density(array):
 
 	class Hist:
 
@@ -24,11 +24,43 @@ def generate_hist(array):
 			# note that length(self.bins) = length(self.counts) + 1
 			self.counts, self.bins = np.histogram(array)
 
+	class Density:
+
+		def __init__(self):
+			self.x = []
+			self.y =[]
+
+		def create(self,hist):
+
+			bins = hist.bins.tolist()
+			counts = hist.counts.tolist()
+			bins_mid = [0]*(len(bins)-1)
+
+			# map bins to new array of n-1 using midpoints
+			for i in range(len(bins)-1):
+				bins_mid[i] = (bins[i] + bins[i+1])/2
+
+			# add one bin length to end of bins_mid
+			bins_mid.append(bins_mid[-1] + (bins_mid[-1]-bins_mid[-2]))
+
+			# add one bin legnth to the begining od bins_mid
+			bins_mid = [(bins_mid[0] - (bins_mid[1] - bins_mid[0]))] + bins_mid
+
+			# add zero to begining and end of counts
+			counts.append(0)
+			counts = [0] + counts
+
+			self.x = bins_mid
+			self.y = counts
+
 	# create histogram object and generate the bins with the data
 	hist = Hist()
 	hist.create(array)
 
-	return hist
+	density = Density()
+	density.create(hist)
+
+	return density
 
 def get_track_data(track_id,auth_header):
 

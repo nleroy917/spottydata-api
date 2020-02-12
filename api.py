@@ -213,12 +213,12 @@ def get_tempo_data(playlist_id):
 
 
 	# create hist object from array of data
-	hist = generate_hist(tempo_store)
+	density = generate_density(tempo_store)
 	
 	# populate payload | dont forget to convert numpy arrays to lists
-	tempo_data={'bins': hist.bins.tolist(),
-				'counts': hist.counts.tolist()}
-
+	tempo_data={'x': density.x,
+				'y': density.y}
+	
 	return jsonify(tempo_data)
 
 
