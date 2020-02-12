@@ -10,8 +10,8 @@ from routes import playlist_analysis_tempo
 from lib.authorize import *
 from lib.playlists import *
 
-# BASE_URL = 'https://spottydata-api.herokuapp.com/'
-BASE_URL = 'http://127.0.0.1:5000/'
+BASE_URL = 'https://spottydata-api.herokuapp.com/'
+# BASE_URL = 'http://127.0.0.1:5000/'
 
 def get_access_token():
 
@@ -69,7 +69,7 @@ if __name__ == '__main__':
 	# Test tempo data generation
 	print('Test ({}/{}) | <playlist_id>/analysis/tempo'.format(cnt,num_tests),end='')
 	data = playlist_analysis_tempo.test(BASE_URL,ACCESS_TOKEN,PLAYLIST_ID)
-	print(data)
+	# print(data)
 	cnt += 1
 
 	
