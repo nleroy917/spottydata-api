@@ -1,7 +1,7 @@
 # SpottyData.com API
 
 ![Heroku](https://heroku-badge.herokuapp.com/?app=spottydata-api)
-![Flask](https://img.shields.io/badge/Flask-1.1.1-blue)
+![Flask](https://img.shields.io/badge/Flask-v1.1.1-blue)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This is the back-end web API for the website www.SpottyData.com. Built with Flask, it acts as the interface between the site and Spotify's official API. Here you can find the code for the API, End-Point Documentation, or rasie any issues/comments! The base URL is: `https://spottydata-api.herokuapp.com/`
