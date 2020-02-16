@@ -76,60 +76,6 @@ def get_track_data(track_id,auth_header):
 
 	return analysis
 
-def loudness_analysis(tracks,auth_header,show_plot=False):
-
-	loudness_store = []
-
-	for track in tracks:
-		analysis = get_track_data(track['id'],auth_header)
-		loudness_store.append(analysis['loudness'])
-
-	loudness_data = {'average':None,
-					 'median':None,
-					 'std':None}
-
-	loudness_data['average'] = np.average(loudness_store)
-	loudness_data['median'] = np.median(loudness_store)
-	loudness_data['std'] = np.std(loudness_store)
-
-	if show_plot==True:
-		print('Showing Plot')
-		ax = sns.kdeplot(loudness_store,shade=True)
-		ax.set(xlabel='dB (Relative Scale)', ylabel='Relative Density', title='Spotify Wrapped 2019 Loudness Data')
-		plt.show()
-	else:
-		pass
-		# dont show distribution - for example running on server
-
-	return loudness_data
-
-def tempo_analysis(tracks,auth_header,show_plot=False):
-
-	tempo_store = []
-
-	for track in tracks:
-		analysis = get_track_data(track['id'],auth_header)
-		tempo_store.append(analysis['tempo'])
-
-	tempo_data = {'average':None,
-					 'median':None,
-					 'std':None}
-
-	tempo_data['average'] = np.average(tempo_store)
-	tempo_data['median'] = np.median(tempo_store)
-	tempo_data['std'] = np.std(tempo_store)
-
-	if show_plot==True:
-		print('Showing Plot')
-		ax = sns.kdeplot(tempo_store,shade=True)
-		ax.set(xlabel='Tempo (bpm)', ylabel='Relative Density', title='Spotify Wrapped 2019 Tempo Data')
-		plt.show()
-	else:
-		pass
-		# dont show distribution - for example running on server
-
-	return tempo_data
-
 def int_to_key(key_int):
 
 	if key_int == 0:
@@ -172,68 +118,157 @@ def int_to_mode(mode_int):
 
 	return mode
 
+def get_key_data(tracks):
 
-def key_analysis(tracks,auth_header,show_plot=False):
+	# Init key object
+	key_data = {'minor': {'A':0,
+						'A#':0,
+						'B':0,
+						'C':0,
+						'C#':0,
+						'D':0,
+						'D#':0,
+						'E':0,
+						'F':0,
+						'F#':0,
+						'G':0,
+						'G#':0},
 
-	key_int_store = []
-	mode_int_store = []
+				'major': {'A':0,
+						'A#':0,
+						'B':0,
+						'C':0,
+						'C#':0,
+						'D':0,
+						'D#':0,
+						'E':0,
+						'F':0,
+						'F#':0,
+						'G':0,
+						'G#':0}
+				}
 
-	key_dist = {'A':0,
-				'A#':0,
-				'B':0,
-				'C':0,
-				'C#':0,
-				'D':0,
-				'D#':0,
-				'E':0,
-				'F':0,
-				'F#':0,
-				'G':0,
-				'G#':0}
-
-	mode_dist = {'Major':0,
-				 'Minor':0}
-
-	# Gather data on all of the tracks 
+				
+	# Iterate and parse data
 	for track in tracks:
-		analysis = get_track_data(track['id'],auth_header)
-		key_int_store.append(analysis['key'])
-		mode_int_store.append(analysis['mode'])
+		analysis = get_track_data(track['id'],spotify_header)
 
-	# convert the pitch integer notation to actual pitches/keys
-	for key_int in key_int_store:
-		key = int_to_key(key_int)
-		key_dist[key] += 1
+		# Some songs may not have a ket or mode, so catch key_not_exist error and pass 
+		# (this would occur for a track that is a podcast or local file)
+		try:
+			if analysis['mode'] == 0:
+				key_data['minor'][int_to_key(analysis['key'])] += 1
+			elif analysis['mode'] == 1:
+				key_data['major'][int_to_key(analysis['key'])] += 1
+			else:
+				continue
+		except:
+			pass
 
-	# convert mode integer notation to actual major/mior
-	for mode_int in mode_int_store:
-		mode = int_to_mode(mode_int)
-		mode_dist[mode] += 1
 
-	# Create DataFrame objects from the dictionary of distributions
-	df_keys = pd.DataFrame(key_dist,index=[0])
-	df_mode = pd.DataFrame(mode_dist,index=[0])
+	# Return JSON Package
+	return key_data
 
-	if show_plot == True:
-		# Plot as a bar 
-		plt.figure(1)
-		plt.bar(x=range(len(key_dist)),height=list(key_dist.values()),align='center',color='teal')
-		plt.xticks(ticks=range(len(key_dist)), labels=list(key_dist.keys()))
-		plt.xlabel('Key')
-		plt.ylabel('Count')
-		plt.title('Spotify Wrapped 2019 Key Distribution')
-		#print(key_dist.keys())
-		plt.figure(2)
-		plt.bar(x=range(len(mode_dist)),height=list(mode_dist.values()),align='center',color='teal')
-		plt.xticks(ticks=range(len(mode_dist)), labels=list(mode_dist.keys()))
-		plt.xlabel('Mode')
-		plt.ylabel('Count')
-		plt.title('Spotify Wrapped 2019 Mode Distribution')
-		#print(mode_dist.keys())
+def get_feel_data(tracks):
 
-		plt.show()
+	# Get access token from the headers and generate spotify's required header
+	access_token = request.headers['access_token']
+	spotify_header = {'Authorization': 'Bearer ' + access_token}
 
-	return key_dist, mode_dist
+	# Extract the tracks from the playlist
+	tracks = get_tracks(playlist_id,spotify_header)
+
+	feel_data = {
+				  "acousticness" : 0,
+				  "danceability" : 0,
+				  "energy" : 0,
+				  "instrumentalness" : 0,
+				  "liveness" : 0,
+				  "speechiness" : 0
+				}
+
+	cnt = 0
+
+	for track in tracks:
+
+		# Analyze the track with Spotify
+		analysis = get_track_data(track['id'],spotify_header)
+
+		try:
+			feel_data['acousticness'] += analysis['acousticness']
+			feel_data['danceability'] += analysis['danceability']
+			feel_data['energy'] += analysis['energy']
+			feel_data['instrumentalness'] += analysis['instrumentalness']
+			feel_data['liveness'] += analysis['liveness']
+			feel_data['speechiness'] += analysis['speechiness']
+
+		except:
+			pass
+
+		cnt += 1
+
+
+	# Divide the sum by the number of tracks
+	for key in feel_data:
+		feel_data[key] /= cnt
+
+
+
+	return feel_data
+
+def get_genre_data(tracks):
+
+	genre_data = {}
+
+	for track in tracks:
+
+		try:
+			# Get track artist
+			artist_id = track['artists'][0]['id']
+
+			# Get Artist data + genres
+			artist = get_artist(artist_id,spotify_header)
+
+			genres = artist['genres']
+
+			# Append artist genres to the genre dictionary
+			for genre in genres:
+
+				# check that the genre exists in the dictionary
+				if genre not in genre_data:
+					genre_data[genre] = 1
+				else:
+					genre_data[genre] += 1
+		except:
+			continue
+
+	#print(genre_data)
+
+	return genre_data
+
+def get_tempo_data(tracks):
+
+	tempo_store = []
+	tempo_data = {}
+
+	for track in tracks:
+
+		try:
+			#analyze track and store tempo
+			analysis = get_track_data(track['id'],spotify_header)
+			tempo_store.append(analysis['tempo'])
+		except:
+			continue
+
+
+	# create hist object from array of data
+	density = generate_density(tempo_store)
+	
+	# populate payload | dont forget to convert numpy arrays to lists
+	tempo_data={'x': density.x,
+				'y': density.y}
+	
+	return tempo_data
 
 if __name__ == '__main__':
 

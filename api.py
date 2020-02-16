@@ -41,9 +41,8 @@ def playlists_get(username):
 
 	return playlist_json
 
-
-@app.route('/<playlist_id>/analysis/keys', methods=['GET'])
-def get_key_data(playlist_id):
+@app.route('/<playlist_id>/analysis/', methods=['GET'])
+def full_analysis(playlist_id):
 
 	# Get access token from the headers and generate spotify's required header
 	access_token = request.headers['access_token']
@@ -80,12 +79,30 @@ def get_key_data(playlist_id):
 						'G#':0}
 				}
 
-				
+	feel_data = {
+			  "acousticness" : 0,
+			  "danceability" : 0,
+			  "energy" : 0,
+			  "instrumentalness" : 0,
+			  "liveness" : 0,
+			  "speechiness" : 0
+			}
+	cnt = 0
+
+	genre_data = {}
+
+	tempo_store = []
+	tempo_data = {}
+	i = 1
 	# Iterate and parse data
 	for track in tracks:
+		#print('analysis {}/{}'.format(i,len(tracks)))
+		# Get the analysis for the track ONCE
 		analysis = get_track_data(track['id'],spotify_header)
+		#i += 1
 
-		# Some songs may not have a ket or mode, so catch key_not_exist error and pass 
+		## STORE KEY DATA ##
+		# Some songs may not have a key or mode, so catch key_not_exist error and pass 
 		# (this would occur for a track that is a podcast or local file)
 		try:
 			if analysis['mode'] == 0:
@@ -97,36 +114,7 @@ def get_key_data(playlist_id):
 		except:
 			pass
 
-
-	# Return JSON Package
-	return jsonify(key_data)
-
-@app.route('/<playlist_id>/analysis/feel', methods=['GET'])
-def get_feel_data(playlist_id):
-
-	# Get access token from the headers and generate spotify's required header
-	access_token = request.headers['access_token']
-	spotify_header = {'Authorization': 'Bearer ' + access_token}
-
-	# Extract the tracks from the playlist
-	tracks = get_tracks(playlist_id,spotify_header)
-
-	feel_data = {
-				  "acousticness" : 0,
-				  "danceability" : 0,
-				  "energy" : 0,
-				  "instrumentalness" : 0,
-				  "liveness" : 0,
-				  "speechiness" : 0
-				}
-
-	cnt = 0
-
-	for track in tracks:
-
-		# Analyze the track with Spotify
-		analysis = get_track_data(track['id'],spotify_header)
-
+		## STORE FEEL DATA ##
 		try:
 			feel_data['acousticness'] += analysis['acousticness']
 			feel_data['danceability'] += analysis['danceability']
@@ -138,31 +126,7 @@ def get_feel_data(playlist_id):
 		except:
 			pass
 
-		cnt += 1
-
-
-	# Divide the sum by the number of tracks
-	for key in feel_data:
-		feel_data[key] /= cnt
-
-
-
-	return jsonify(feel_data)
-
-@app.route('/<playlist_id>/analysis/genre', methods=['GET'])
-def get_genre_data(playlist_id):
-
-	# Get access token from the headers and generate spotify's required header
-	access_token = request.headers['access_token']
-	spotify_header = {'Authorization': 'Bearer ' + access_token}
-
-	# Extract the tracks from the playlist
-	tracks = get_tracks(playlist_id,spotify_header)
-
-	genre_data = {}
-
-	for track in tracks:
-
+		## STORE GENRE DATA ##
 		try:
 			# Get track artist
 			artist_id = track['artists'][0]['id']
@@ -183,32 +147,20 @@ def get_genre_data(playlist_id):
 		except:
 			continue
 
-	#print(genre_data)
+		cnt += 1
 
-	return jsonify(genre_data)
-
-@app.route('/<playlist_id>/analysis/tempo', methods=['GET'])
-def get_tempo_data(playlist_id):
-
-	# Get access token from the headers and generate spotify's required header
-	access_token = request.headers['access_token']
-	spotify_header = {'Authorization': 'Bearer ' + access_token}
-
-	# Extract the tracks from the playlist
-	tracks = get_tracks(playlist_id,spotify_header)
-
-	tempo_store = []
-	tempo_data = {}
-
-	for track in tracks:
-
+		## STORE TEMPO DATA ##
 		try:
 			#analyze track and store tempo
-			analysis = get_track_data(track['id'],spotify_header)
 			tempo_store.append(analysis['tempo'])
 		except:
 			continue
 
+	## POST PROCESSING ##
+
+	# Divide the sum by the number of tracks
+	for key in feel_data:
+		feel_data[key] /= cnt
 
 	# create hist object from array of data
 	density = generate_density(tempo_store)
@@ -216,8 +168,16 @@ def get_tempo_data(playlist_id):
 	# populate payload | dont forget to convert numpy arrays to lists
 	tempo_data={'x': density.x,
 				'y': density.y}
-	
-	return jsonify(tempo_data)
+
+
+	payload = {}
+	payload['keys'] = key_data
+	payload['feel'] = feel_data
+	payload['genres'] = genre_data
+	payload['tempo'] = tempo_data
+
+	return jsonify(payload)
+
 
 
 if __name__ == '__main__':

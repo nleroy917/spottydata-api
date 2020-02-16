@@ -37,7 +37,7 @@ def add_to_playlist(playlist_id,track_uris,auth_header):
 
 def get_tracks(playlist_id,auth_header):
 
-    response = requests.get('https://api.spotify.com/v1/playlists/{}/tracks?limit=50'.format(playlist_id),
+    response = requests.get('https://api.spotify.com/v1/playlists/{}/tracks'.format(playlist_id),
                             headers=auth_header)
 
     tracks = json.loads(response.text)
@@ -50,7 +50,7 @@ def get_tracks(playlist_id,auth_header):
         except KeyError:
             time.sleep(3) # sleep for 3 secxonds to try API again
 
-    print(len(parsed_playlist))
+    # print(len(parsed_playlist))
     return parsed_playlist
 
 def get_artist(artist_id,auth_header):

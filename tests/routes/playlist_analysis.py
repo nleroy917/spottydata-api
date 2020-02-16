@@ -5,11 +5,13 @@ sys.path.append("..")
 
 from utils.authentication import *
 
+import termplotlib as tpl
+
 def test(BASE_URL,access_token,playlist_id):
 
 	headers = {'access_token': access_token}
 
-	r = requests.get(BASE_URL + playlist_id + '/analysis/genre',headers=headers)
+	r = requests.get(BASE_URL + playlist_id + '/analysis',headers=headers)
 
 	if r.status_code == 200:
 		print('\tPASS')
@@ -31,4 +33,10 @@ if __name__ == '__main__':
 
 	print('Testing {}'.format(playlist_name))
 
-	test(BASE_URL,access_token,playlist_id)
+	data = test(BASE_URL,access_token,playlist_id)
+	print(data)
+
+	fig = tpl.figure()
+	fig.plot(data['tempo']['x'], data['tempo']['y'], width=60, height=20)
+	fig.show()
+
