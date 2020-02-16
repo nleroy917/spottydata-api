@@ -1,5 +1,6 @@
 from lib.authorize import *
 from configparser import SafeConfigParser
+import time
 
 def get_playlist_id(share_url):
 
@@ -42,8 +43,13 @@ def get_tracks(playlist_id,auth_header):
     tracks = json.loads(response.text)
 
     #print(tracks)
+    for i in range(100):
+        try:
+            parsed_playlist = [x['track'] for x in tracks['items']]
+            break
+        except KeyError:
+            time.sleep(5) # sleep for 5 seconds to try API again
 
-    parsed_playlist = [x['track'] for x in tracks['items']]
 
     return parsed_playlist
 

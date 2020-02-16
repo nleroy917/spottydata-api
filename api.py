@@ -134,7 +134,7 @@ def get_feel_data(playlist_id):
 			feel_data['energy'] += analysis['energy']
 			feel_data['instrumentalness'] += analysis['instrumentalness']
 			feel_data['liveness'] += analysis['liveness']
-			feel_data['loudness'] += analysis['loudness']
+			feel_data['loudness'] += abs(analysis['loudness'])
 			feel_data['speechiness'] += analysis['speechiness']
 
 		except:
