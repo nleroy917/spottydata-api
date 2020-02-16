@@ -1,5 +1,9 @@
 import requests
 import json
+import sys
+sys.path.append("..")
+
+from utils.authentication import *
 
 def test(BASE_URL,access_token,playlist_id):
 
@@ -18,4 +22,12 @@ def test(BASE_URL,access_token,playlist_id):
 
 
 if __name__ == '__main__':
-	test(access_token,playlist_id)
+	BASE_URL = 'https://spottydata-api.herokuapp.com/'
+	# BASE_URL = 'http://127.0.0.1:5000/'
+
+	access_token = get_access_token()
+	playlist_id, playlist_name = get_playlist()
+
+	print('Testing {}'.format(playlist_name))
+
+	print(test(BASE_URL,access_token,playlist_id))
