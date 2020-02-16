@@ -41,7 +41,7 @@ def playlists_get(username):
 
 	return playlist_json
 
-@app.route('/<playlist_id>/analysis/', methods=['GET'])
+@app.route('/<playlist_id>/analysis', methods=['GET'])
 def full_analysis(playlist_id):
 
 	# Get access token from the headers and generate spotify's required header
