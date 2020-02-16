@@ -50,7 +50,6 @@ def generate_density(array):
 			counts.append(0)
 			counts = [0] + counts
 
-			my_rounded_list = [ round(elem, 2) for elem in my_list ]
 			self.x = [int(round(val)) for val in bins_mid]
 			self.y = [int(round(val)) for val in counts]
 

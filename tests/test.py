@@ -10,8 +10,8 @@ from routes import playlist_analysis_tempo
 from lib.authorize import *
 from lib.playlists import *
 
-BASE_URL = 'https://spottydata-api.herokuapp.com/'
-# BASE_URL = 'http://127.0.0.1:5000/'
+# BASE_URL = 'https://spottydata-api.herokuapp.com/'
+BASE_URL = 'http://127.0.0.1:5000/'
 
 def get_access_token():
 
