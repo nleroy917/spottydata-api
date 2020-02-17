@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+import os
 load_dotenv()
 GENIUS_API_SECRET=os.getenv('GENIUS_API_SECRET')
 
