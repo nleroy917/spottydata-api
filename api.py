@@ -1,6 +1,7 @@
 # Import custom libraries
 from lib.playlists import *
 from lib.track_analysis import *
+from lib.lyrics import *
 
 # import flask
 from flask import Flask
@@ -13,6 +14,9 @@ CORS(app)
 
 #import other necessary modules
 import json
+from dotenv import load_dotenv
+load_dotenv()
+GENIUS_API_SECRET=os.getenv('GENIUS_API_SECRET')
 
 # Testing route/main route
 @app.route('/')
@@ -40,6 +44,42 @@ def playlists_get(username):
 	playlist_json = json.dumps(playlists)
 
 	return playlist_json
+
+@app.route('/<playlist_id>/analysis/lyrics', methods=['GET'])
+def lyrics_analysis(playlist_id):
+
+	# Get access token from the headers and generate spotify's required header
+	access_token = request.headers['access_token']
+	spotify_header = {'Authorization': 'Bearer ' + access_token}
+
+	# Extract the tracks from the playlist
+	tracks = get_tracks(playlist_id,spotify_header)
+
+	cnt = 1
+
+	lyrics_count = {}
+
+	for track in tracks[0:10]:
+		#print('Track {}/{}'.format(cnt,len(tracks)))
+		lyrics = get_lyrics(track,GENIUS_API_SECRET)
+		words = parse_lyrics(lyrics)
+
+		for word in words:
+			if word in lyrics_count:
+				lyrics_count[word.capitalize()] += 1
+			else:
+				lyrics_count[word.capitalize()] = 1
+
+	cnt += 1
+	lyrics_count_sorted = {k: v for k, v in sorted(lyrics_count.items(), key=lambda item: item[1])}
+
+	# format payload for React library usage
+	lyrics_analysis = []
+	for key in lyrics_count_sorted:
+		lyrics_analysis.append({'text':key,'value':lyrics_count_sorted[key]})
+
+	return jsonify(lyrics_analysis[0:30])
+
 
 @app.route('/<playlist_id>/analysis', methods=['GET'])
 def full_analysis(playlist_id):
