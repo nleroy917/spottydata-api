@@ -1,3 +1,7 @@
+from dotenv import load_dotenv
+load_dotenv()
+GENIUS_API_SECRET=os.getenv('GENIUS_API_SECRET')
+
 # Import custom libraries
 from lib.playlists import *
 from lib.track_analysis import *
@@ -14,9 +18,6 @@ CORS(app)
 
 #import other necessary modules
 import json
-from dotenv import load_dotenv
-load_dotenv()
-GENIUS_API_SECRET=os.getenv('GENIUS_API_SECRET')
 
 # Testing route/main route
 @app.route('/')
