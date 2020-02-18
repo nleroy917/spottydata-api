@@ -9,9 +9,9 @@ def get_playlist_id(share_url):
     return id
 
 def get_playlists(user,auth_header):
-    response = requests.get('https://api.spotify.com/v1/users/{}/playlists'.format(user),
+    response = requests.get('https://api.spotify.com/v1/users/{}/playlists?limit=50'.format(user),
                             headers=auth_header)
-
+    # print(response.text)
     return_package = json.loads(response.text)
     playlists = return_package['items']
 
