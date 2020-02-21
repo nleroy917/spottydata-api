@@ -105,6 +105,12 @@ def full_analysis(playlist_id):
 	# Extract the tracks from the playlist
 	tracks = get_tracks(playlist_id,spotify_header)
 
+	tracks_ids = []
+	for track in tracks:
+		tracks_ids.append(track['id'])
+
+	analysis_list = get_multi_track_data(tracks_ids,spotify_header)
+
 	# Init key object
 	key_data = {'minor': {'A':0,
 						'A#':0,
@@ -149,10 +155,9 @@ def full_analysis(playlist_id):
 	tempo_data = {}
 	i = 1
 	# Iterate and parse data
-	for track in tracks:
+	for analysis in analysis_list:
 		print('analysis {}/{}'.format(i,len(tracks)))
 		# Get the analysis for the track ONCE
-		analysis = get_track_data(track['id'],spotify_header)
 		i += 1
 
 		## STORE KEY DATA ##
@@ -210,6 +215,9 @@ def full_analysis(playlist_id):
 		except:
 			continue
 
+
+
+
 	## POST PROCESSING ##
 
 	# Divide the sum by the number of tracks
@@ -229,6 +237,8 @@ def full_analysis(playlist_id):
 	payload['feel'] = feel_data
 	payload['genres'] = genre_data
 	payload['tempo'] = tempo_data
+
+	print(payload)
 
 	return jsonify(payload)
 

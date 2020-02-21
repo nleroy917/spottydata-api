@@ -6,6 +6,8 @@ import seaborn as sns
 import pandas as pd
 from configparser import SafeConfigParser
 import numpy as np
+from urllib.parse import urlencode
+import time
 
 sns.set(color_codes=True)
 sns.set_palette("dark")
@@ -62,6 +64,30 @@ def generate_density(array):
 	density.create(hist)
 
 	return density
+
+def get_multi_track_data(playlist_ids,auth_header):
+
+	query_string = ','.join(playlist_ids)
+
+	start = time.time()
+	for i in range(100):
+		response = requests.get('https://api.spotify.com/v1/audio-features/?ids=' + query_string,
+	                            headers=auth_header)
+		if response.status_code == 200:
+			return_package = json.loads(response.text)['audio_features']
+			break
+		else:
+			print(response.text)
+			time.sleep(3)
+			continue
+	end = time.time()
+	
+	#print('Time for analysis request (s):',end-start)
+	#print(return_package)
+
+	analysis = return_package
+
+	return analysis
 
 def get_track_data(track_id,auth_header):
 

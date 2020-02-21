@@ -11,6 +11,8 @@ from utils.authentication import *
 ACCESS_TOKEN = get_access_token()
 PLAYLIST_ID, PLAYLIST_NAME = get_playlist()
 
+print(PLAYLIST_ID,'|',PLAYLIST_NAME)
+
 class UserBehaviour(TaskSet):
     def on_start(self):
         """ on_start is called when a Locust start before any task is scheduled """
