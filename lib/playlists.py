@@ -14,13 +14,15 @@ def get_playlists(user,auth_header):
         response = requests.get('https://api.spotify.com/v1/users/{}/playlists?limit=50'.format(user),
                                 headers=auth_header)
         if response.status_code == 200:
+            # print(response.text)
+            return_package = json.loads(response.text)
             break
         else:
+            time.sleep(5) # sleep for 5 seconds
             print(response.text)
             continue
 
-    # print(response.text)
-    return_package = json.loads(response.text)
+
     playlists = return_package['items']
 
     return playlists
@@ -45,19 +47,19 @@ def add_to_playlist(playlist_id,track_uris,auth_header):
 
 def get_tracks(playlist_id,auth_header):
 
-    response = requests.get('https://api.spotify.com/v1/playlists/{}/tracks'.format(playlist_id),
-                            headers=auth_header)
-
-    tracks = json.loads(response.text)
-
-    #print(tracks)
     for i in range(100):
-        try:
-            parsed_playlist = [x['track'] for x in tracks['items']]
+        response = requests.get('https://api.spotify.com/v1/playlists/{}/tracks'.format(playlist_id),
+                                headers=auth_header)
+        if response.status_code = 200:
+            tracks = json.loads(response.text)
             break
-        except KeyError:
-            print('Possible rate limit exceeding.')
-            time.sleep(3) # sleep for 3 seconds to try API again
+        else:
+            print(response.text)
+            time.sleep(3)
+            continue
+
+    parsed_playlist = [x['track'] for x in tracks['items']]
+    
 
     # print(len(parsed_playlist))
     return parsed_playlist
