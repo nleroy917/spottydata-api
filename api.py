@@ -105,11 +105,18 @@ def full_analysis(playlist_id):
 	# Extract the tracks from the playlist
 	tracks = get_tracks(playlist_id,spotify_header)
 
-	tracks_ids = []
+	# extract the track ids
+	track_ids = []
+	artist_ids = []
 	for track in tracks:
-		tracks_ids.append(track['id'])
+		track_ids.append(track['id'])
+		artist_ids.append(track['artists'][0]['id'])
 
-	analysis_list = get_multi_track_data(tracks_ids,spotify_header)
+	# get analysis for each track
+	analysis_list = get_multi_track_data(track_ids,spotify_header)
+
+	# get artists
+	artist_list = get_artists(artist_ids,spotify_header)
 
 	# Init key object
 	key_data = {'minor': {'A':0,
@@ -139,6 +146,7 @@ def full_analysis(playlist_id):
 						'G#':0}
 				}
 
+	# Init feel data
 	feel_data = {
 			  "acousticness" : 0,
 			  "danceability" : 0,
@@ -147,15 +155,20 @@ def full_analysis(playlist_id):
 			  "liveness" : 0,
 			  "speechiness" : 0
 			}
-	cnt = 0
 
 	genre_data = {}
-
 	tempo_store = []
 	tempo_data = {}
 	i = 1
+
 	# Iterate and parse data
-	for analysis in analysis_list:
+	for analysis,track,artist in zip(analysis_list,tracks,artist_list):
+
+		#print(analysis)
+		#print(track)
+		#print(artist)
+
+
 		print('analysis {}/{}'.format(i,len(tracks)))
 		# Get the analysis for the track ONCE
 		i += 1
@@ -185,14 +198,11 @@ def full_analysis(playlist_id):
 		except:
 			pass
 
+
 		## STORE GENRE DATA ##
 		try:
-			# Get track artist
-			artist_id = track['artists'][0]['id']
 
 			# Get Artist data + genres
-			artist = get_artist(artist_id,spotify_header)
-
 			genres = artist['genres']
 
 			# Append artist genres to the genre dictionary
@@ -206,15 +216,12 @@ def full_analysis(playlist_id):
 		except:
 			continue
 
-		cnt += 1
-
 		## STORE TEMPO DATA ##
 		try:
 			#analyze track and store tempo
-			tempo_store.append(analysis['tempo'])
+			tempo_store.append(float(analysis['tempo']))
 		except:
 			continue
-
 
 
 
@@ -222,7 +229,7 @@ def full_analysis(playlist_id):
 
 	# Divide the sum by the number of tracks
 	for key in feel_data:
-		feel_data[key] /= cnt
+		feel_data[key] /= (i-1)
 
 	# create hist object from array of data
 	density = generate_density(tempo_store)
@@ -238,7 +245,7 @@ def full_analysis(playlist_id):
 	payload['genres'] = genre_data
 	payload['tempo'] = tempo_data
 
-	print(payload)
+	#print(payload)
 
 	return jsonify(payload)
 

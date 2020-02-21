@@ -64,6 +64,41 @@ def get_tracks(playlist_id,auth_header):
     # print(len(parsed_playlist))
     return parsed_playlist
 
+def get_artists(artist_ids,auth_header):
+
+    # Get first half
+    query_string_1 = ','.join(artist_ids[:50])
+    query_string_2 = ','.join(artist_ids[50:])
+
+    for i in range(100):
+        response = requests.get('https://api.spotify.com/v1/artists/?ids='+query_string_1,
+                                headers=auth_header)
+
+        if response.status_code == 200:
+            artists1 = json.loads(response.text)
+            break
+        else:
+            print(response.text)
+            time.sleep(3)
+            continue
+
+    for i in range(100):
+        response = requests.get('https://api.spotify.com/v1/artists/?ids='+query_string_2,
+                                headers=auth_header)
+
+        if response.status_code == 200:
+            artists2 = json.loads(response.text)
+            break
+        else:
+            print(response.text)
+            time.sleep(3)
+            continue
+
+    print(len(artists1['artists']))
+    print(len(artists2['artists']))
+
+    return artists1['artists'] + artists2['artists']
+
 def get_artist(artist_id,auth_header):
 
     response = requests.get('https://api.spotify.com/v1/artists/{}'.format(artist_id),
