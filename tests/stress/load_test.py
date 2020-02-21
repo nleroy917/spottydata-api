@@ -19,13 +19,17 @@ class UserBehaviour(TaskSet):
     def test(self):
         self.client.get('/test',headers={"access_token": ACCESS_TOKEN})
 
-    @task(1)
+    @task(0)
     def index(self):
         self.client.get("/")
 
-    @task(1)
+    @task(0)
     def get_tracks(self):
         self.client.get('/playlists/{}/tracks'.format(PLAYLIST_ID), headers={"access_token": ACCESS_TOKEN})
+
+    @task(1)
+    def get_analysis(self):
+        self.client.get('/{}/analysis'.format(PLAYLIST_ID), headers={"access_token": ACCESS_TOKEN})
 
 class WebsiteUser(HttpLocust):
     task_set = UserBehaviour
