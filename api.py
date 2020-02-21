@@ -138,10 +138,10 @@ def full_analysis(playlist_id):
 	i = 1
 	# Iterate and parse data
 	for track in tracks:
-		#print('analysis {}/{}'.format(i,len(tracks)))
+		print('analysis {}/{}'.format(i,len(tracks)))
 		# Get the analysis for the track ONCE
 		analysis = get_track_data(track['id'],spotify_header)
-		#i += 1
+		i += 1
 
 		## STORE KEY DATA ##
 		# Some songs may not have a key or mode, so catch key_not_exist error and pass 
