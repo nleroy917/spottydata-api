@@ -9,8 +9,16 @@ def get_playlist_id(share_url):
     return id
 
 def get_playlists(user,auth_header):
-    response = requests.get('https://api.spotify.com/v1/users/{}/playlists?limit=50'.format(user),
-                            headers=auth_header)
+
+    for i in range(100):
+        response = requests.get('https://api.spotify.com/v1/users/{}/playlists?limit=50'.format(user),
+                                headers=auth_header)
+        if response.status_code == 200:
+            break
+        else:
+            print(response.text)
+            continue
+
     # print(response.text)
     return_package = json.loads(response.text)
     playlists = return_package['items']
@@ -48,7 +56,8 @@ def get_tracks(playlist_id,auth_header):
             parsed_playlist = [x['track'] for x in tracks['items']]
             break
         except KeyError:
-            time.sleep(3) # sleep for 3 secxonds to try API again
+            print('Possible rate limit exceeding.')
+            time.sleep(3) # sleep for 3 seconds to try API again
 
     # print(len(parsed_playlist))
     return parsed_playlist
