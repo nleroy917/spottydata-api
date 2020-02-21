@@ -25,7 +25,7 @@ class UserBehaviour(TaskSet):
 
     @task(1)
     def get_tracks(self):
-        self.client.get('/playlists/{}/tracks', headers={"access_token": ACCESS_TOKEN})
+        self.client.get('/playlists/{}/tracks'.format(PLAYLIST_ID), headers={"access_token": ACCESS_TOKEN})
 
 class WebsiteUser(HttpLocust):
     task_set = UserBehaviour
