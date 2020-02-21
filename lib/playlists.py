@@ -50,7 +50,7 @@ def get_tracks(playlist_id,auth_header):
     for i in range(100):
         response = requests.get('https://api.spotify.com/v1/playlists/{}/tracks'.format(playlist_id),
                                 headers=auth_header)
-        if response.status_code = 200:
+        if response.status_code == 200:
             tracks = json.loads(response.text)
             break
         else:

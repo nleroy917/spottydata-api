@@ -47,6 +47,17 @@ def playlists_get(username):
 
 	return playlist_json
 
+# testing route to load test the API for getting tracks
+@app.route('/playlists/<playlist_id>/tracks', methods=['GET'])
+def playlists_get(username):
+	
+	access_token = request.headers['access_token']
+	spotify_header = {'Authorization': 'Bearer ' + access_token}
+
+	tracks = get_tracks(playlist_id,spotify_header)
+
+	return jsonify(tracks)
+
 @app.route('/<playlist_id>/analysis/lyrics', methods=['GET'])
 def lyrics_analysis(playlist_id):
 
