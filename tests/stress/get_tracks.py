@@ -16,22 +16,16 @@ print(PLAYLIST_ID,'|',PLAYLIST_NAME)
 class UserBehaviour(TaskSet):
     def on_start(self):
         """ on_start is called when a Locust start before any task is scheduled """
-        self.test()
+        pass
 
     def test(self):
         self.client.get('/test',headers={"access_token": ACCESS_TOKEN})
 
-    @task(0)
-    def index(self):
-        self.client.get("/")
 
-    @task(0)
+    @task(1)
     def get_tracks(self):
         self.client.get('/playlists/{}/tracks'.format(PLAYLIST_ID), headers={"access_token": ACCESS_TOKEN})
 
-    @task(1)
-    def get_analysis(self):
-        self.client.get('/{}/analysis'.format(PLAYLIST_ID), headers={"access_token": ACCESS_TOKEN})
 
 class WebsiteUser(HttpLocust):
     task_set = UserBehaviour

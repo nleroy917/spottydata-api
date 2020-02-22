@@ -109,8 +109,12 @@ def full_analysis(playlist_id):
 	track_ids = []
 	artist_ids = []
 	for track in tracks:
-		track_ids.append(track['id'])
-		artist_ids.append(track['artists'][0]['id'])
+		print(track)
+		try:
+			track_ids.append(track['id'])
+			artist_ids.append(track['artists'][0]['id'])
+		except:
+			continue
 
 	# get analysis for each track
 	analysis_list = get_multi_track_data(track_ids,spotify_header)

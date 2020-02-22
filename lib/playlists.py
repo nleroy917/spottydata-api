@@ -66,9 +66,14 @@ def get_tracks(playlist_id,auth_header):
 
 def get_artists(artist_ids,auth_header):
 
+    cleaned_ids = []
+    for artist_id in artist_ids:
+        if artist_id:
+            cleaned_ids.append(artist_id)
+
     # Get first half
-    query_string_1 = ','.join(artist_ids[:50])
-    query_string_2 = ','.join(artist_ids[50:])
+    query_string_1 = ','.join(cleaned_ids[:50])
+    query_string_2 = ','.join(cleaned_ids[50:])
 
     for i in range(100):
         response = requests.get('https://api.spotify.com/v1/artists/?ids='+query_string_1,

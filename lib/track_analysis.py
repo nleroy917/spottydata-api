@@ -65,9 +65,15 @@ def generate_density(array):
 
 	return density
 
-def get_multi_track_data(playlist_ids,auth_header):
+def get_multi_track_data(track_ids,auth_header):
+	print(track_ids)
 
-	query_string = ','.join(playlist_ids)
+	cleaned_ids = []
+	for track_id in track_ids:
+		if track_id:
+			cleaned_ids.append(track_id)
+
+	query_string = ','.join(cleaned_ids)
 
 	start = time.time()
 	for i in range(100):
