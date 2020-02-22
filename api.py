@@ -234,6 +234,7 @@ def full_analysis(playlist_id):
 	# Divide the sum by the number of tracks
 	for key in feel_data:
 		feel_data[key] /= (i-1)
+		feel_data[key] *= 100
 
 	# create hist object from array of data
 	density = generate_density(tempo_store)
