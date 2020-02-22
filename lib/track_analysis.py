@@ -83,6 +83,7 @@ def get_multi_track_data(track_ids,auth_header):
 			return_package = json.loads(response.text)['audio_features']
 			break
 		else:
+			print('Error getting analysis')
 			print(response.text)
 			time.sleep(3)
 			continue

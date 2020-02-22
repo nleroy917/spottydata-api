@@ -54,6 +54,7 @@ def get_tracks(playlist_id,auth_header):
             tracks = json.loads(response.text)
             break
         else:
+            print('error getting tracks')
             print(response.text)
             time.sleep(3)
             continue
@@ -72,37 +73,62 @@ def get_artists(artist_ids,auth_header):
             cleaned_ids.append(artist_id)
 
     # Get first half
-    query_string_1 = ','.join(cleaned_ids[:50])
-    query_string_2 = ','.join(cleaned_ids[50:])
+    if len(cleaned_ids) > 50:
+        query_string_1 = ','.join(cleaned_ids[:50])
+        query_string_2 = ','.join(cleaned_ids[50:])
 
-    for i in range(100):
-        response = requests.get('https://api.spotify.com/v1/artists/?ids='+query_string_1,
-                                headers=auth_header)
+        for i in range(100):
+            response = requests.get('https://api.spotify.com/v1/artists/?ids='+query_string_1,
+                                    headers=auth_header)
 
-        if response.status_code == 200:
-            artists1 = json.loads(response.text)
-            break
-        else:
-            print(response.text)
-            time.sleep(3)
-            continue
+            if response.status_code == 200:
+                artists1 = json.loads(response.text)
+                break
+            else:
+                print('error getting artists')
+                print(response.text)
+                time.sleep(3)
+                continue
 
-    for i in range(100):
-        response = requests.get('https://api.spotify.com/v1/artists/?ids='+query_string_2,
-                                headers=auth_header)
+        for i in range(100):
+            response = requests.get('https://api.spotify.com/v1/artists/?ids='+query_string_2,
+                                    headers=auth_header)
 
-        if response.status_code == 200:
-            artists2 = json.loads(response.text)
-            break
-        else:
-            print(response.text)
-            time.sleep(3)
-            continue
+            if response.status_code == 200:
+                artists2 = json.loads(response.text)
+                break
+            else:
+                print('error getting artists')
+                print(response.text)
+                time.sleep(3)
+                continue
 
-    print(len(artists1['artists']))
-    print(len(artists2['artists']))
+        return artists1['artists'] + artists2['artists']
 
-    return artists1['artists'] + artists2['artists']
+    else:
+        query_string = ','.join(cleaned_ids)
+        print('https://api.spotify.com/v1/artists/?ids='+query_string)
+
+        for i in range(100):
+            response = requests.get('https://api.spotify.com/v1/artists/?ids='+query_string,
+                                    headers=auth_header)
+
+            if response.status_code == 200:
+                artists = json.loads(response.text)
+                print(artists)
+                break
+            else:
+                print('error getting artists')
+                print(response.text)
+                time.sleep(3)
+                continue
+
+        return artists['artists']
+
+
+
+
+
 
 def get_artist(artist_id,auth_header):
 

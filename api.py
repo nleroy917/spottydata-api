@@ -109,7 +109,7 @@ def full_analysis(playlist_id):
 	track_ids = []
 	artist_ids = []
 	for track in tracks:
-		print(track)
+		#print(track)
 		try:
 			track_ids.append(track['id'])
 			artist_ids.append(track['artists'][0]['id'])
@@ -168,6 +168,12 @@ def full_analysis(playlist_id):
 	dutation_data = {}
 
 	i = 1
+
+
+	print(len(analysis_list))
+	print(len(tracks))
+	print(len(artist_list))
+
 
 	# Iterate and parse data
 	for analysis,track,artist in zip(analysis_list,tracks,artist_list):
