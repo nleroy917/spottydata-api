@@ -161,8 +161,12 @@ def full_analysis(playlist_id):
 			}
 
 	genre_data = {}
+
 	tempo_store = []
 	tempo_data = {}
+	duration_store = []
+	dutation_data = {}
+
 	i = 1
 
 	# Iterate and parse data
@@ -218,15 +222,20 @@ def full_analysis(playlist_id):
 				else:
 					genre_data[genre] += 1
 		except:
-			continue
+			pass
 
 		## STORE TEMPO DATA ##
 		try:
 			#analyze track and store tempo
 			tempo_store.append(float(analysis['tempo']))
 		except:
-			continue
+			pass
 
+		## STORE DURATION DATA ##
+		try:
+			duration_store.append(float(analysis['duration_ms'])/1000)
+		except:
+			pass
 
 
 	## POST PROCESSING ##
@@ -237,11 +246,16 @@ def full_analysis(playlist_id):
 		feel_data[key] *= 100
 
 	# create hist object from array of data
-	density = generate_density(tempo_store)
+	tempo_density = generate_density(tempo_store)
 	
+	duration_density = generate_density(duration_store)
+
 	# populate payload | dont forget to convert numpy arrays to lists
-	tempo_data={'x': density.x,
-				'y': density.y}
+	tempo_data={'x': tempo_density.x,
+				'y': tempo_density.y}
+
+	duration_data ={'x': duration_density.x,
+					'y': duration_density.y}
 
 
 	payload = {}
@@ -249,6 +263,7 @@ def full_analysis(playlist_id):
 	payload['feel'] = feel_data
 	payload['genres'] = genre_data
 	payload['tempo'] = tempo_data
+	payload['duration'] = duration_data
 
 	#print(payload)
 
