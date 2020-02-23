@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 load_dotenv()
-GENIUS_API_SECRET=os.getenv('GENIUS_API_SECRET')
+GENIUS_API_SECRET=os.getenv('GENIUS_ACCESS_TOKEN')
 
 # Import custom libraries
 from lib.playlists import *
@@ -69,30 +69,38 @@ def lyrics_analysis(playlist_id):
 	# Extract the tracks from the playlist
 	tracks = get_tracks(playlist_id,spotify_header)
 
-	cnt = 1
+	cnt = 0
+	max_songs=10
 
 	lyrics_count = {}
 
-	for track in tracks[0:10]:
+	for track in tracks:
+		if cnt >= max_songs:
+			break
 		#print('Track {}/{}'.format(cnt,len(tracks)))
 		lyrics = get_lyrics(track,GENIUS_API_SECRET)
+		if not lyrics:
+			continue
 		words = parse_lyrics(lyrics)
 
 		for word in words:
+			#word = word.capitalize()
 			if word in lyrics_count:
-				lyrics_count[word.capitalize()] += 1
+				lyrics_count[word] += 1
 			else:
-				lyrics_count[word.capitalize()] = 1
+				lyrics_count[word] = 1
 
-	cnt += 1
-	lyrics_count_sorted = {k: v for k, v in sorted(lyrics_count.items(), key=lambda item: item[1])}
 
+		cnt += 1
+	
+	lyrics_count_sorted = {k: v for k, v in sorted(lyrics_count.items(), key=lambda item: item[1], reverse=True)}
+	
 	# format payload for React library usage
 	lyrics_analysis = []
 	for key in lyrics_count_sorted:
 		lyrics_analysis.append({'text':key,'value':lyrics_count_sorted[key]})
 
-	return jsonify(lyrics_analysis[0:30])
+	return jsonify(lyrics_analysis[0:200])
 
 
 @app.route('/<playlist_id>/analysis', methods=['GET'])
@@ -239,7 +247,7 @@ def full_analysis(playlist_id):
 
 		## STORE DURATION DATA ##
 		try:
-			duration_store.append(float(analysis['duration_ms'])/1000)
+			duration_store.append(float(analysis['duration_ms'])/1000/60)
 		except:
 			pass
 
@@ -253,8 +261,7 @@ def full_analysis(playlist_id):
 
 	# create hist object from array of data
 	tempo_density = generate_density(tempo_store)
-	
-	duration_density = generate_density(duration_store)
+	duration_density = generate_density(duration_store,float=True)
 
 	# populate payload | dont forget to convert numpy arrays to lists
 	tempo_data={'x': tempo_density.x,

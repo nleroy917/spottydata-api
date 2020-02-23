@@ -12,7 +12,7 @@ import time
 sns.set(color_codes=True)
 sns.set_palette("dark")
 
-def generate_density(array):
+def generate_density(array,float=False):
 
 	class Hist:
 
@@ -52,8 +52,12 @@ def generate_density(array):
 			counts.append(0)
 			counts = [0] + counts
 
-			self.x = [int(round(val)) for val in bins_mid]
-			self.y = [int(round(val)) for val in counts]
+			if(float==False):
+				self.x = [int(round(val)) for val in bins_mid]
+				self.y = [int(round(val)) for val in counts]
+			elif(float==True):
+				self.x = [round(val,2) for val in bins_mid]
+				self.y = [round(val,2) for val in counts]
 
 
 	# create histogram object and generate the bins with the data

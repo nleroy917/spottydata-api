@@ -32,13 +32,13 @@ def get_lyrics(track,GENIUS_API_SECRET):
 
 
 def parse_lyrics(lyrics):
-
+	#print(lyrics)
 	lines = lyrics.split('\n')
 	translator = str.maketrans('', '', string.punctuation)
 	words_list = []
 
 	for line in lines:
-		if '[' in line or ']' in line:
+		if '[' in line or ']' in line: # skip song section labels
 			continue
 		#print(line)
 		cleaned_line = line.translate(translator)
