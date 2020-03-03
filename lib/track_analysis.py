@@ -69,8 +69,98 @@ def generate_density(array,float=False):
 
 	return density
 
+def get_recs(playlist_id,auth_header):
+
+	# get tracks in playlist
+	tracks = get_tracks(playlist_id,auth_header)
+	
+	# extract the track & artist ids
+	track_ids = []
+	artist_ids = []
+	for track in tracks:
+		#print(track)
+		try:
+			track_ids.append(track['id'])
+			artist_ids.append(track['artists'][0]['id'])
+		except:
+			continue
+
+	# concatenate them together and select 5 random ones
+	ids = track_ids + artist_ids
+	seed_ids = np.random.choice(ids,5)
+
+	seed_artists = []
+	seed_tracks = []
+
+	# split into seed tracks and seed artists
+	for seed in seed_ids:
+		if seed in track_ids:
+			seed_tracks.append(seed)
+		elif seed in artist_ids:
+			seed_artists.append(seed)
+
+	track_query_string = ''
+	artist_query_string = ''
+
+	# clean the ids
+	cleaned_track_ids = []
+	for track_id in seed_tracks:
+		if track_id:
+			cleaned_track_ids.append(track_id)
+	
+	if cleaned_track_ids:
+		track_query_string = ','.join(cleaned_track_ids)
+
+
+	cleaned_artist_ids = []
+	for artist_id in seed_artists:
+		if artist_id:
+			cleaned_artist_ids.append(artist_id)
+	
+	if cleaned_artist_ids:
+		artist_query_string = ','.join(cleaned_artist_ids)
+
+
+
+	for i in range(100):
+		response = requests.get('https://api.spotify.com/v1/recommendations?seed_tracks=' + track_query_string + '&seed_artists=' + artist_query_string,
+	                            headers=auth_header)
+
+		if response.status_code == 200:
+			rec_tracks = json.loads(response.text)['tracks']
+			break
+		else:
+			print('Error getting recomendations')
+			print(response.text)
+			time.sleep(3)
+			continue
+
+	rec_ids = []
+	for track in rec_tracks:
+		rec_ids.append(track['id'])
+
+	query_string = ','.join(rec_ids)
+
+	for i in range(100):
+		response = requests.get('https://api.spotify.com/v1/tracks?ids=' + query_string,
+	                            headers=auth_header)
+
+		if response.status_code == 200:
+			rec_tracks_full = json.loads(response.text)['tracks']
+			break
+		else:
+			print('Error getting recomendations')
+			print(response.text)
+			time.sleep(3)
+			continue
+
+	return rec_tracks_full
+
+
+
+
 def get_multi_track_data(track_ids,auth_header):
-	print(track_ids)
+	#print(track_ids)
 
 	cleaned_ids = []
 	for track_id in track_ids:

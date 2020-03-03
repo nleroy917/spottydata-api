@@ -59,7 +59,7 @@ def get_tracks(playlist_id,auth_header):
             time.sleep(3)
             continue
 
-    parsed_playlist = [x['track'] for x in tracks['items']]
+    parsed_playlist = tracks['items']
     
 
     # print(len(parsed_playlist))

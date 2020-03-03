@@ -19,6 +19,7 @@ CORS(app)
 
 #import other necessary modules
 import json
+from dateutil import parser
 
 # Testing route/main route
 @app.route('/')
@@ -68,6 +69,7 @@ def lyrics_analysis(playlist_id):
 
 	# Extract the tracks from the playlist
 	tracks = get_tracks(playlist_id,spotify_header)
+	tracks = [x['track'] for x in tracks]
 
 	cnt = 0
 	max_songs=10
@@ -102,6 +104,17 @@ def lyrics_analysis(playlist_id):
 
 	return jsonify(lyrics_analysis[0:200])
 
+@app.route('/<playlist_id>/recommendations', methods=['GET'])
+def playlist_recs(playlist_id):
+
+	# Get access token from the headers and generate spotify's required header
+	access_token = request.headers['access_token']
+	spotify_header = {'Authorization': 'Bearer ' + access_token}
+
+	recs = get_recs(playlist_id,spotify_header)
+
+	return jsonify(recs)
+
 
 @app.route('/<playlist_id>/analysis', methods=['GET'])
 def full_analysis(playlist_id):
@@ -110,8 +123,14 @@ def full_analysis(playlist_id):
 	access_token = request.headers['access_token']
 	spotify_header = {'Authorization': 'Bearer ' + access_token}
 
-	# Extract the tracks from the playlist
+	# Extract the tracks from the playlist adn get last updated track
 	tracks = get_tracks(playlist_id,spotify_header)
+	last_update_iso = tracks[0]['added_at']
+
+	last_update = parser.isoparse(last_update_iso)
+
+	#print(tracks[0])
+	tracks = [x['track'] for x in tracks]
 
 	# extract the track ids
 	track_ids = []
@@ -178,9 +197,9 @@ def full_analysis(playlist_id):
 	i = 1
 
 
-	print(len(analysis_list))
-	print(len(tracks))
-	print(len(artist_list))
+	#print(len(analysis_list))
+	#print(len(tracks))
+	#print(len(artist_list))
 
 
 	# Iterate and parse data
@@ -277,8 +296,7 @@ def full_analysis(playlist_id):
 	payload['genres'] = genre_data
 	payload['tempo'] = tempo_data
 	payload['duration'] = duration_data
-
-	#print(payload)
+	payload['last_update'] = last_update
 
 	return jsonify(payload)
 
