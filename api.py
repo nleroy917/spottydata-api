@@ -80,7 +80,7 @@ def lyrics_analysis(playlist_id):
 		if cnt >= max_songs:
 			break
 		#print('Track {}/{}'.format(cnt,len(tracks)))
-		lyrics = get_lyrics(track,GENIUS_API_SECRET)
+		lyrics = get_lyrics_new(track,GENIUS_API_SECRET)
 		if not lyrics:
 			continue
 		words = parse_lyrics(lyrics)

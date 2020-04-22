@@ -15,6 +15,20 @@ import string
 from configparser import SafeConfigParser
 import numpy as np
 import lyricsgenius
+import requests
+
+LYRICS_API = 'https://api.lyrics.ovh/v1/'
+
+def get_lyrics_new(track):
+
+	response = requests.get(LYRICS_API + track['artists'][0]['name'] + '/' + track['name'])
+
+	if response.status_code == 200:
+		data = response.json()
+		
+		return data['lyrics']
+
+	return None
 
 def get_lyrics(track,GENIUS_API_SECRET):
 
@@ -33,7 +47,11 @@ def get_lyrics(track,GENIUS_API_SECRET):
 
 def parse_lyrics(lyrics):
 	#print(lyrics)
-	lines = lyrics.split('\n')
+	try:
+		lines = lyrics.split('\n')
+	except:
+		return []
+
 	translator = str.maketrans('', '', string.punctuation)
 	words_list = []
 
@@ -51,6 +69,9 @@ def parse_lyrics(lyrics):
 				continue
 			if 'u\2005' in word:
 				continue
+			if '\r' in word:
+				word.replace('\r', '')
+				
 			words_list.append(word)
 
 	return words_list
@@ -69,14 +90,17 @@ if __name__ == '__main__':
 	playlist_id = '37i9dQZF1Ethb70Ir9WW6o'
 
 	tracks = get_tracks(playlist_id,auth_header)
+	tracks = [x['track'] for x in tracks]
 
 	cnt = 1
 
 	lyrics_count = {}
 
 	for track in tracks[0:10]:
+
 		print('Track {}/{}'.format(cnt,len(tracks)))
-		lyrics = get_lyrics(track,GENIUS_API_SECRET)
+		#lyrics = get_lyrics(track,GENIUS_API_SECRET)
+		lyrics = get_lyrics_new(track)
 		words = parse_lyrics(lyrics)
 
 		for word in words:
